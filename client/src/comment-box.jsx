@@ -41,7 +41,6 @@ export default class CommentBox extends React.Component {
       .catch((err) => {
         console.log(this.props.url, err);
       })
-      e.preventDefault();
   }
 
   render() {
