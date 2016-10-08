@@ -1,0 +1,35 @@
+version: '2'
+services:
+  nginx:
+    build:
+      context: containers/nginx
+      dockerfile: Dockerfile
+    volumes_from:
+      - datastore
+    ports:
+      - '8080:80'
+    links:
+      - rails
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    volumes_from:
+      - datastore
+  rails:
+    build:
+      context: ./
+      dockerfile: containers/rails/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgres://postgres:mysecretpassword@db/react_tutorial_production
+    volumes_from:
+      - datastore
+    links:
+      - db
+  datastore:
+    build:
+      context: containers/datastore
+      dockerfile: Dockerfile
